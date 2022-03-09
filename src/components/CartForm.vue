@@ -98,10 +98,10 @@ export default {
     return {
       form: {
         user: {
-          email: '',
           name: '',
-          address: '',
-          tel: ''
+          email: '',
+          tel: '',
+          address: ''
         },
         message: ''
       }
@@ -113,21 +113,20 @@ export default {
       return phoneNumber.test(value) ? true : '需要正確的電話號碼'
     },
     sendOrder () {
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`
       const data = {
-        user: this.form.user
+        user: this.form.user,
+        message: this.form.message
       }
       console.log(data)
       this.$http
-        .post(
-          `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/order`,
-          { data }
-        )
+        .post(apiUrl, { data })
         .then((res) => {
           alert(res.data.message)
           this.$refs.form.resetForm()
         })
-        .catch(() => {
-          alert('請重新操作')
+        .catch((err) => {
+          console.log(err)
         })
     }
   }

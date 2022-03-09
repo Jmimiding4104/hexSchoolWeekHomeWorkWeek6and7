@@ -8,10 +8,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <router-link class="nav-link" to="/admin/AdminProducts">產品管理</router-link>
+          <router-link class="nav-link" to="/admin/AdminProducts">產品</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/admin/AdminCouple">優惠券管理</router-link>
+          <router-link class="nav-link" to="/admin/AdminOrder">訂單</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/admin/AdminCouple">優惠券</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/admin/AdminPost">貼文</router-link>
         </li>
       </ul>
       <div type="button" class="btn btn-primary position-relative" @click="logOut">

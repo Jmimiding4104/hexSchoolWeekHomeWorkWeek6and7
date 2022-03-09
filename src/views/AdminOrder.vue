@@ -1,17 +1,13 @@
 <template>
     <div class="container">
-        <div class="text-end mt-4">
-            <button class="btn btn-primary">
-                建立新的折扣券
-            </button>
-        </div>
         <table class="table mt-4">
             <thead>
                 <tr>
-                    <th>名稱</th>
-                    <th>折扣百分比</th>
-                    <th>到期日</th>
-                    <th>是否啟用</th>
+                    <th>購買時間</th>
+                    <th>電子信箱</th>
+                    <th>購買款項</th>
+                    <th>應付金額</th>
+                    <th>是否付款</th>
                     <th>編輯</th>
                 </tr>
             </thead>
@@ -51,3 +47,25 @@
         </table>
     </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      orders: []
+    }
+  },
+  methods: {
+    getOrder () {
+      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders`)
+        .then((res) => {
+          res.data.orders = this.orders
+          console.log(res)
+        })
+    }
+  },
+  mounted () {
+    this.getOrder()
+  }
+}
+</script>

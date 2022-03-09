@@ -2,17 +2,18 @@
     <div class="container">
         <div class="text-end mt-4">
             <button class="btn btn-primary">
-                建立新的折扣券
+                建立新的頁面
             </button>
         </div>
         <table class="table mt-4">
             <thead>
                 <tr>
-                    <th>名稱</th>
-                    <th>折扣百分比</th>
-                    <th>到期日</th>
-                    <th>是否啟用</th>
-                    <th>編輯</th>
+                    <th width="120">標題</th>
+                    <th width="120">作者</th>
+                    <th>描述</th>
+                    <th width="120">建立時間</th>
+                    <th width="100">是否公開</th>
+                    <th width="120">編輯</th>
                 </tr>
             </thead>
             <tbody>
