@@ -28,20 +28,6 @@
   </div>
 </template>
 
-<style lang="scss">
-html,
-body {
-  height: 100%;
-  text-align: center;
-}
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
-
 <script>
 export default {
   data () {

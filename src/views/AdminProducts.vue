@@ -55,21 +55,6 @@
 <DelProduct :id="productId" :tempProduct="tempProduct" @getData="getData" ref="DelProduct"></DelProduct>
 </template>
 
-<style lang="scss">
-img {
-  object-fit: contain;
-  max-width: 100%;
-}
-
-.primary-image {
-  height: 300px;
-}
-
-.images {
-  height: 150px;
-}
-</style>
-
 <script>
 import TemplateProduct from '@/components/TemplateProduct'
 import DelProduct from '@/components/DelProduct'
