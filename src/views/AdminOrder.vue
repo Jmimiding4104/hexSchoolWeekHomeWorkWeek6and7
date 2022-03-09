@@ -57,10 +57,14 @@ export default {
   },
   methods: {
     getOrder () {
-      this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders`)
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders`
+      this.$http.get(apiUrl, this.tempProduct)
         .then((res) => {
           res.data.orders = this.orders
           console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
         })
     }
   },
