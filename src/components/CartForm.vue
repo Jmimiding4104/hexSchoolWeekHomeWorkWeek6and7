@@ -123,6 +123,7 @@ export default {
         .post(apiUrl, { data })
         .then((res) => {
           alert(res.data.message)
+          console.log(res)
           this.$refs.form.resetForm()
         })
         .catch((err) => {
