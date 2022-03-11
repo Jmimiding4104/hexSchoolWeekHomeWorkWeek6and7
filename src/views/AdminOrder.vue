@@ -1,5 +1,9 @@
 <template>
+    <IsLoading style="z-index: 1500" :active="isLoading"></IsLoading>
     <div class="container">
+        <OrderModal :temp-order="tempOrder" @updateOrder="updateOrder" ref="OrderModal"></OrderModal>
+        <DelOrderModal :temp-order="tempOrder" :id="orderId" @getData="getData" ref="DelOrderModal"></DelOrderModal>
+
         <table class="table mt-4">
             <thead>
                 <tr>
@@ -12,17 +16,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in products" :key="item.id">
-                    <td>{{item.category}}</td>
-                    <td>{{item.title}}</td>
-                    <td class="text-end">{{item.origin_price}}</td>
-                    <td class="text-end">{{item.price}}</td>
+              <template v-for="item in orders" :key="item.id">
+                <tr v-if="orders.length" :class="{ 'text-secondary' : !item.is_paid }">
+                    <td>{{convertToTime(item.create_at)}}</td>
+                    <td>{{item.user?.email}}</td>
                     <td>
-                        <span
-                        :class="{'text-success' : item.is_enabled , 'text-danger' : !item.is_enabled}"
-                        >
-                        {{item.is_enabled?'啟用':'未啟用'}}
-                        </span>
+                      <ul class="list-unstyled">
+                        <li v-for="product in item.products" :key="product.id">
+                          {{ product.product.title }} 數量：{{ product.qty }} {{ product.product.unit }}
+                        </li>
+                      </ul>
+                    </td>
+                    <td>{{item.total}}</td>
+                    <td>
+                      <div class="form-check form-switch">
+                        <input
+                        class="form-check-input"
+                        type="checkbox"
+                        role="switch" id="paid"
+                        v-model="item.is_paid"
+                        @change="updateOrder(item)">
+                          <label class="form-check-label" for="paid">
+                            <span
+                            :class="{'text-success' : item.is_paid , 'text-danger' : !item.is_paid}"
+                            >
+                              {{item.is_paid?'已付款':'未付款'}}
+                            </span>
+                          </label>
+                      </div>
                     </td>
                     <td>
                         <div class="btn-group">
@@ -31,7 +52,7 @@
                                 class="btn btn-outline-primary btn-sm"
                                 @click="openModal('edit', item)"
                             >
-                                編輯
+                                檢視
                             </button>
                             <button
                                 type="button"
@@ -43,33 +64,76 @@
                         </div>
                     </td>
                 </tr>
+              </template>
             </tbody>
-        </table>
+          </table>
     </div>
+  <PaginationComponent :pagination="pagination" @getData="getData"></PaginationComponent>
 </template>
 
 <script>
+import OrderModal from '@/components/OrderModal.vue'
+import DelOrderModal from '@/components/DelOrderModal.vue'
+import PaginationComponent from '@/components/PaginationComponent.vue'
+
 export default {
   data () {
     return {
-      orders: []
+      orders: [],
+      due_date: '',
+      is_paid: '',
+      tempOrder: {},
+      orderId: '',
+      isLoading: false,
+      pagination: ''
     }
   },
+  components: {
+    OrderModal,
+    DelOrderModal,
+    PaginationComponent
+  },
   methods: {
-    getOrder () {
-      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders`
+    getData (page = 1) {
+      this.isLoading = true
+      const apiUrl = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`
       this.$http.get(apiUrl, this.tempProduct)
         .then((res) => {
-          res.data.orders = this.orders
-          console.log(res)
+          this.orders = res.data.orders
+          this.pagination = res.data.pagination
+          this.isLoading = false
         })
         .catch((err) => {
-          console.log(err)
+          alert(err.message)
         })
+    },
+    updateOrder (item) {
+      this.isLoading = true
+      const Url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`
+      const paid = { is_paid: item.is_paid }
+      this.$http.put(Url, { data: paid })
+        .then((res) => {
+          this.getData()
+        })
+    },
+    convertToTime (time) {
+      const dateAndTime = new Date(time * 1000)
+      this.due_date = dateAndTime.toLocaleDateString()
+      return `${this.due_date}`
+    },
+    openModal (status, item) {
+      if (status === 'edit') {
+        this.tempOrder = JSON.parse(JSON.stringify(item))
+        this.$refs.OrderModal.openModal()
+      } else if (status === 'del') {
+        this.tempOrder = JSON.parse(JSON.stringify(item))
+        this.$refs.DelOrderModal.openModal()
+        this.orderId = item.id
+      }
     }
   },
   mounted () {
-    this.getOrder()
+    this.getData()
   }
 }
 </script>
