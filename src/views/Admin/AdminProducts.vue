@@ -53,11 +53,14 @@
     </div>
 <TemplateProduct :isNew="isNew" :temp-product="tempProduct" :id="productId" @getData="getData" ref="TemplateProduct"></TemplateProduct>
 <DelProduct :id="productId" :tempProduct="tempProduct" @getData="getData" ref="DelProduct"></DelProduct>
+<PaginationComponent :pagination="pagination" @getData="getData"></PaginationComponent>
 </template>
 
 <script>
 import TemplateProduct from '@/components/TemplateProduct'
 import DelProduct from '@/components/DelProduct'
+import PaginationComponent from '@/components/PaginationComponent.vue'
+
 export default {
   data () {
     return {
@@ -72,7 +75,8 @@ export default {
   },
   components: {
     TemplateProduct,
-    DelProduct
+    DelProduct,
+    PaginationComponent
   },
   methods: {
     getData (page = 1) {

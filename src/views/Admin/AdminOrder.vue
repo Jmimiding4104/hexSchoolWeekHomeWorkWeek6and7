@@ -1,5 +1,5 @@
 <template>
-    <IsLoading style="z-index: 1500" :active="isLoading"></IsLoading>
+    <IsLoading style="z-index: 1000" :active="isLoading"></IsLoading>
     <div class="container">
         <OrderModal :temp-order="tempOrder" @updateOrder="updateOrder" ref="OrderModal"></OrderModal>
         <DelOrderModal :temp-order="tempOrder" :id="orderId" @getData="getData" ref="DelOrderModal"></DelOrderModal>
@@ -18,7 +18,7 @@
             <tbody>
               <template v-for="item in orders" :key="item.id">
                 <tr v-if="orders.length" :class="{ 'text-secondary' : !item.is_paid }">
-                    <td>{{convertToTime(item.create_at)}}</td>
+                    <td>{{new Date(item.create_at * 1000).toLocaleDateString()}}</td>
                     <td>{{item.user?.email}}</td>
                     <td>
                       <ul class="list-unstyled">
@@ -115,11 +115,6 @@ export default {
         .then((res) => {
           this.getData()
         })
-    },
-    convertToTime (time) {
-      const dateAndTime = new Date(time * 1000)
-      this.due_date = dateAndTime.toLocaleDateString()
-      return `${this.due_date}`
     },
     openModal (status, item) {
       if (status === 'edit') {

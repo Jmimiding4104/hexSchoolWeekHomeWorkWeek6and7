@@ -151,6 +151,7 @@ export default {
           alert(res.data.message)
           this.$emit('getData')
           this.productModal.hide()
+          this.$httpMessageState(res, '更新產品')
         })
         .catch((err) => {
           alert(err.data.message)

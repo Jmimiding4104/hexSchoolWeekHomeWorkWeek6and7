@@ -56,13 +56,13 @@
                   </tr>
                   <tr>
                     <th>下單時間</th>
-                    <td>{{convertToTime(tempOrder.create_at)}}</td>
+                    <td>{{new Date(tempOrder.create_at * 1000).toLocaleDateString()}}</td>
                   </tr>
                   <tr>
                     <th>付款時間</th>
                     <td>
                       <span v-if="tempOrder.paid_date">
-                        {{ convertToTime(tempOrder?.paid_date) }}
+                        {{ new Date(tempOrder.paid_date * 1000).toLocaleDateString() }}
                       </span>
                       <span v-else></span>
                     </td>
@@ -156,11 +156,6 @@ export default {
     },
     convertToNT (num) {
       return `NT${num}`
-    },
-    convertToTime (time) {
-      const dateAndTime = new Date(time * 1000)
-      this.due_date = dateAndTime.toLocaleDateString()
-      return `${this.due_date}`
     }
   },
   mixins: [ModalView]

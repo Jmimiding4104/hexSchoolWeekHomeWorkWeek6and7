@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '../views/Front/HomeView.vue'
 
 const routes = [
   {
@@ -9,7 +9,7 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('../views/FrontView.vue'),
+    component: () => import('../views/Front/FrontView.vue'),
     children: [
       {
         path: '',
@@ -18,15 +18,15 @@ const routes = [
       },
       {
         path: 'Cart',
-        component: () => import('../views/CartView.vue')
+        component: () => import('../views/Front/CartView.vue')
       },
       {
         path: 'Products',
-        component: () => import('../views/ProductsView.vue')
+        component: () => import('../views/Front/ProductsView.vue')
       },
       {
         path: 'Product/:id',
-        component: () => import('../views/ProductView.vue')
+        component: () => import('../views/Front/ProductView.vue')
       }
     ]
   },
@@ -36,23 +36,23 @@ const routes = [
   },
   {
     path: '/admin',
-    component: () => import('../views/DashboardView.vue'),
+    component: () => import('../views/Admin/DashboardView.vue'),
     children: [
       {
         path: 'AdminCouple',
-        component: () => import('../views/AdminCouple.vue')
+        component: () => import('../views/Admin/AdminCouple.vue')
       },
       {
         path: 'AdminProducts',
-        component: () => import('../views/AdminProducts.vue')
+        component: () => import('../views/Admin/AdminProducts.vue')
       },
       {
         path: 'AdminOrder',
-        component: () => import('../views/AdminOrder.vue')
+        component: () => import('../views/Admin/AdminOrder.vue')
       },
       {
         path: 'AdminPost',
-        component: () => import('../views/AdminPost.vue')
+        component: () => import('../views/Admin/AdminPost.vue')
       }
     ]
   }
