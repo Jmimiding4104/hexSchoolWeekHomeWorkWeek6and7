@@ -114,6 +114,10 @@ export default {
       this.$http.put(Url, { data: paid })
         .then((res) => {
           this.getData()
+          this.$httpMessageState(res, '更新狀態')
+        })
+        .catch((err) => {
+          this.$httpMessageState(err, '更新狀態')
         })
     },
     openModal (status, item) {

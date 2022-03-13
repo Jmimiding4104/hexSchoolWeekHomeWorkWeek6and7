@@ -42,12 +42,12 @@ export default {
       this.$http
         .delete(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${this.id}`)
         .then((res) => {
-          alert(res.data.message)
+          this.$httpMessageState(res, '刪除產品')
           this.delProductModal.hide()
           this.$emit('getData')
         })
-        .catch(() => {
-          alert('刪除失敗，請重新嘗試!')
+        .catch((err) => {
+          this.$httpMessageState(err, '刪除產品')
         })
     }
   },

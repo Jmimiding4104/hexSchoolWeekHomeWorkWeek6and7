@@ -133,6 +133,7 @@
 <script>
 import { Modal } from 'bootstrap'
 export default {
+  inject: ['emitter'],
   props: ['isNew', 'temp-product', 'id'],
   data () {
     return {
@@ -148,13 +149,12 @@ export default {
         httpMethod = 'put'
       } this.$http[httpMethod](api, { data: this.tempProduct })
         .then((res) => {
-          alert(res.data.message)
           this.$emit('getData')
           this.productModal.hide()
           this.$httpMessageState(res, '更新產品')
         })
         .catch((err) => {
-          alert(err.data.message)
+          this.$httpMessageState(err, '更新產品')
         })
     },
     createImg () {

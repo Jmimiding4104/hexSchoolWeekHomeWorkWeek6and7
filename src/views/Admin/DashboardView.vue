@@ -37,10 +37,11 @@ export default {
         )
         .then((res) => {
           this.checksuccess = true
+          this.$httpMessageState(res, '登入')
         })
-        .catch(() => {
-          alert('請重新登入')
+        .catch((err) => {
           this.$router.push('/login')
+          this.$httpMessageState(err, '登入')
         })
     }
   },

@@ -1,4 +1,5 @@
 <template>
+  <IsLoading style="z-index: 1000" :active="isLoading"></IsLoading>
     <div class="container">
         <div class="text-end mt-4">
             <button class="btn btn-primary" @click="openModal('new')">
@@ -51,7 +52,7 @@
             </tbody>
         </table>
     </div>
-<TemplateProduct :isNew="isNew" :temp-product="tempProduct" :id="productId" @getData="getData" ref="TemplateProduct"></TemplateProduct>
+<TemplateProduct :isNew="isNew" :temp-product="tempProduct" :id="productId" @getData="getData" :isLoading="isLoading" ref="TemplateProduct"></TemplateProduct>
 <DelProduct :id="productId" :tempProduct="tempProduct" @getData="getData" ref="DelProduct"></DelProduct>
 <PaginationComponent :pagination="pagination" @getData="getData"></PaginationComponent>
 </template>
@@ -60,6 +61,7 @@
 import TemplateProduct from '@/components/TemplateProduct'
 import DelProduct from '@/components/DelProduct'
 import PaginationComponent from '@/components/PaginationComponent.vue'
+import emitter from '@/libs/emitter'
 
 export default {
   data () {
@@ -70,7 +72,8 @@ export default {
         imagesUrl: []
       },
       isNew: false,
-      productId: ''
+      productId: '',
+      isLoading: false
     }
   },
   components: {
@@ -80,13 +83,16 @@ export default {
   },
   methods: {
     getData (page = 1) {
+      this.isLoading = true
       this.$http.get(`${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination
+          this.isLoading = false
         })
-        .catch(() => {
-          alert('請重新登入')
+        .catch((err) => {
+          this.$httpMessageState(err, '登入驗證')
+          this.isLoading = false
           this.$router.push('/login')
         })
     },
@@ -108,6 +114,11 @@ export default {
         this.$refs.DelProduct.openModal()
         this.productId = item.id
       }
+    },
+    modalLoading () {
+      emitter.on('modalLoading', (status) => {
+        this.isLoading = status.status
+      })
     }
   },
   mounted () {

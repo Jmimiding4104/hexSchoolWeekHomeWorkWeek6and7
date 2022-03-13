@@ -40,13 +40,16 @@ export default {
       const Url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${this.id}`
       this.$http.delete(Url)
         .then((res) => {
-          alert(res.data.message)
           this.hideModal()
-          this.getOrders()
+          this.$httpMessageState(res, '刪除訂單')
+          this.getData()
+        })
+        .catch((err) => {
+          this.$httpMessageState(err, '刪除訂單')
         })
     },
-    getOrders () {
-      this.$emit('getOrders')
+    getData () {
+      this.$emit('getData')
     }
   }
 }
