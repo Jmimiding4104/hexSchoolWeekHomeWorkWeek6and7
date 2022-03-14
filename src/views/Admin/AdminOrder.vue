@@ -2,7 +2,7 @@
     <IsLoading style="z-index: 1000" :active="isLoading"></IsLoading>
     <div class="container">
         <OrderModal :temp-order="tempOrder" @updateOrder="updateOrder" ref="OrderModal"></OrderModal>
-        <DelOrderModal :temp-order="tempOrder" :id="orderId" @getData="getData" ref="DelOrderModal"></DelOrderModal>
+        <DelOrderModal :temp-order="tempOrder" @getData="getData" ref="DelOrderModal"></DelOrderModal>
 
         <table class="table mt-4">
             <thead>
@@ -117,7 +117,7 @@ export default {
           this.$httpMessageState(res, '更新狀態')
         })
         .catch((err) => {
-          this.$httpMessageState(err, '更新狀態')
+          this.$httpMessageState(err.response, '更新狀態')
         })
     },
     openModal (status, item) {

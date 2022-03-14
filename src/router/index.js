@@ -40,7 +40,7 @@ const routes = [
     children: [
       {
         path: 'AdminCouple',
-        component: () => import('../views/Admin/AdminCouple.vue')
+        component: () => import('../views/Admin/AdminCoupon.vue')
       },
       {
         path: 'AdminProducts',

@@ -41,7 +41,7 @@ export default {
         })
         .catch((err) => {
           this.$router.push('/login')
-          this.$httpMessageState(err, '登入')
+          this.$httpMessageState(err.response, '登入')
         })
     }
   },

@@ -1,4 +1,5 @@
 <template>
+<IsLoading style="z-index: 1000" :active="isLoading"></IsLoading>
 <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
  <div class="modal-dialog modal-xl">
    <div class="modal-content border-0">
@@ -15,6 +16,8 @@
              <div class="mb-3">
                <label for="imageUrl" class="form-label">輸入主圖網址</label>
                <input type="text" class="form-control" placeholder="請輸入圖片連結" v-model="tempProduct.imageUrl">
+               <label for="file" class="form-label">或  上傳檔案</label>
+               <input type="file" class="form-control" id="file" placeholder="請輸入圖片連結" ref="fileInput" @change="uploadImg()">
                <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
              </div>
              <div class="mb-3">
@@ -22,6 +25,7 @@
                <div v-if = "Array.isArray(tempProduct.imagesUrl)">
                  <div v-for = "(img, key) in tempProduct.imagesUrl" :key = "key + 123456789">
                    <input type="text" class="form-control" placeholder="請輸入圖片連結" v-model="tempProduct.imagesUrl[key]">
+                   <input type="file" class="form-control" id="file" placeholder="請輸入圖片連結" ref="fileInput" @change="uploadImgs()">
                    <img class="img-fluid" :src="img" alt="">
                  </div>
                </div>
@@ -132,12 +136,14 @@
 
 <script>
 import { Modal } from 'bootstrap'
+import emitter from '@/libs/emitter'
 export default {
   inject: ['emitter'],
   props: ['isNew', 'temp-product', 'id'],
   data () {
     return {
-      productModal: ''
+      productModal: '',
+      isLoading: false
     }
   },
   methods: {
@@ -154,7 +160,37 @@ export default {
           this.$httpMessageState(res, '更新產品')
         })
         .catch((err) => {
-          this.$httpMessageState(err, '更新產品')
+          this.$httpMessageState(err.response, '更新產品')
+        })
+    },
+    uploadImg () {
+      this.isLoading = true
+      const fileInput = document.querySelector('#file')
+      const formData = new FormData()
+      const file = fileInput.files[0]
+      formData.append('file-to-upload', file)
+      const url = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/upload`
+      this.$http
+        .post(url, formData)
+        .then((res) => {
+          if (res.data.success) {
+            this.tempProduct.imageUrl = res.data.imageUrl
+            this.$refs.fileInput.value = ''
+            this.$httpMessageState(res, '圖片上傳')
+            this.isLoading = false
+          } else {
+            this.$refs.fileInput.value = ''
+            emitter.emit('toast-msg', {
+              style: 'danger',
+              title: '圖片上傳失敗',
+              content: res.data.message
+            })
+            this.isLoading = false
+          }
+        })
+        .catch((err) => {
+          this.$httpMessageState(err.response, '圖片上傳')
+          this.isLoading = false
         })
     },
     createImg () {
